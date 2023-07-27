@@ -8,3 +8,6 @@
 .page {
   @apply bg-gradient-to-bl from-primary to-secondary h-screen;
 }
+.link {
+  @apply text-neutral tracking-wider underline-offset-2 text-sm underline;
+}
