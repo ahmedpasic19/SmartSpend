@@ -11,8 +11,8 @@ const Navbar = () => {
     { href: '/home', label: 'Home' },
     { href: '/transactions', label: 'Transakcije' },
     { href: '/transactions/add', label: 'Dodaj transakciju' },
-    { href: '/stashes', label: 'Izvori' },
-    { href: '/stashes/add', label: 'Dodaj izvor' },
+    { href: '/stashes', label: 'Zalihe' },
+    { href: '/stashes/add', label: 'Dodaj zalihu' },
     { href: '/categories', label: 'Kategorije' },
     { href: '/categories/add', label: 'Dodaj kategorije' },
   ]
