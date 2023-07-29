@@ -1,7 +1,7 @@
 import Navbar from '@/components/layout/nav/Navbar'
 
 export const metadata = {
-  title: 'Paycheck',
+  title: 'SmartSpend',
   description: 'Track youre financial transactions',
 }
 
