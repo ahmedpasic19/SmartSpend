@@ -19,6 +19,7 @@ const TransactionForm = () => {
   const [transaction, setTransaction] = useState({} as ITransaction)
   const [selectedStash, setSelectedStash] = useState({} as TSelect)
   const [selectedCategory, setSelectedCategory] = useState({} as TSelect)
+  const [type, setType] = useState({} as TSelect)
 
   const transactionCollection = collection(db, 'transactions')
 
@@ -30,6 +31,10 @@ const TransactionForm = () => {
   // select option
   const stashOptions = stashes.map((stash) => ({ label: stash.name, value: stash.uid }))
   const categoryOptions = stashCategories.map((cat) => ({ label: cat.name, value: cat.uid }))
+  const transactionTypeOptions = [
+    { value: 'income', label: 'Prihod' },
+    { value: 'expense', label: 'Rashod' },
+  ]
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTransaction((prev) => ({ ...prev, [e.target.name]: e.target.value }))
@@ -41,6 +46,9 @@ const TransactionForm = () => {
   const handleCategorySelect = (option: TSelect | null) => {
     if (option) setSelectedCategory(option)
   }
+  const handleTypeSelect = (option: TSelect | null) => {
+    if (option) setType(option)
+  }
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -49,6 +57,7 @@ const TransactionForm = () => {
 
       await addDoc(transactionCollection, {
         ...transaction,
+        amount: type.value === 'income' ? transaction.amount : -transaction.amount,
         user_id: currentUser?.uid,
         category_id: selectedCategory.value || null,
         stash_id: selectedStash.value,
@@ -59,6 +68,7 @@ const TransactionForm = () => {
       setTransaction({} as ITransaction)
       setSelectedStash({} as TSelect)
       setSelectedCategory({} as TSelect)
+      setType({} as TSelect)
     } catch (error) {
       console.log(error)
     }
@@ -69,7 +79,19 @@ const TransactionForm = () => {
       <h3 className="text-2xl text-neutral font-bold tracking-tight w-full text-center pb-4">Dodaj transakciju</h3>
 
       <FieldSet label="Iznos" name="amount" value={transaction.amount} onChange={handleChange} type="number" />
-      <fieldset className="mt-2">
+      <fieldset className="pt-1">
+        <label className="w-full text-start py-2 text-lg text-accent font-semibold tracking-wide">
+          Tip transakcije
+        </label>
+        <Select
+          options={transactionTypeOptions}
+          value={Object.keys(type).length ? type : null}
+          placeholder="Odaberite tip"
+          onChange={handleTypeSelect}
+        />
+      </fieldset>
+      <fieldset className="pt-1">
+        <label className="w-full text-start py-2 text-lg text-accent font-semibold tracking-wide">Izvor</label>
         <Select
           options={stashOptions}
           value={Object.keys(selectedStash).length ? selectedStash : null}
@@ -80,7 +102,8 @@ const TransactionForm = () => {
           Dodajte izvor
         </Link>
       </fieldset>
-      <fieldset className="mt-2">
+      <fieldset className="pt-1">
+        <label className="w-full text-start py-2 text-lg text-accent font-semibold tracking-wide">Kategorija</label>
         <Select
           options={categoryOptions}
           value={Object.keys(selectedCategory).length ? selectedCategory : null}

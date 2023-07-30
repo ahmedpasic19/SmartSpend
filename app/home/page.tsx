@@ -2,8 +2,12 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+import Link from 'next/link'
+
 import { auth } from '@/config/firebase-config'
 import { signOut, onAuthStateChanged, User } from 'firebase/auth'
+
+import '@/app/globals.css'
 
 export default function Home() {
   const [user, setUser] = useState({} as User)
@@ -38,9 +42,18 @@ export default function Home() {
           <label>Total:</label>
           <p>000.000</p>
         </div>
-
-        <button onClick={() => router.push('/transactions/add')}>Dodaj transakciju</button>
-        {/* <button>Dodaj transakciju</button> */}
+        <ul className="flex flex-col">
+          <Link className="link" href="/transactions/add">
+            Dodaj transakciju
+          </Link>
+          <Link className="link" href="/stashes/add">
+            Dodaj stash
+          </Link>
+          <Link className="link" href="/categories/add">
+            Dodaj kategorije
+          </Link>
+        </ul>
+        <button onClick={logOut}>Log out</button>
       </section>
 
       <section className="w-full">
