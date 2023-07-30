@@ -37,7 +37,7 @@ const TransactionForm = () => {
   ]
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTransaction((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    setTransaction((prev) => ({ ...prev, [e.target.name]: parseFloat(e.target.value) }))
   }
 
   const handleStashSelect = (option: TSelect | null) => {

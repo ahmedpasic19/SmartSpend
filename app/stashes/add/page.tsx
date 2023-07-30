@@ -1,5 +1,4 @@
 import StashForm from '@/components/layout/forms/StashForm'
-import StashList from '@/components/layout/mics/StashList'
 
 export default function AddStash() {
   return (
@@ -12,10 +11,6 @@ export default function AddStash() {
 
       <section className="py-5">
         <StashForm />
-      </section>
-
-      <section className="w-4/5 h-full mb-5">
-        <StashList />
       </section>
     </main>
   )

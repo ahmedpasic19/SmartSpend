@@ -28,7 +28,7 @@ const TransactionList: React.FC<TProps> = ({ transactions, pagination }) => {
         header: 'Iznos',
         accessorKey: 'amount',
         cell: ({ row }: { row: TRow }) =>
-          row.original.amount > 0 ? '+' + row.original.amount + ' KM' : +row.original.amount + ' KM',
+          row.original.amount > 0 ? '+' + row.original.amount + ' KM' : row.original.amount + ' KM',
       },
       {
         header: 'Izvor',
