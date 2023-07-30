@@ -3,13 +3,12 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBAVyFoAeUb1RjA4D8V30gupu9NZK-k4ls',
-  authDomain: 'paycheck-4172e.firebaseapp.com',
-  projectId: 'paycheck-4172e',
-  storageBucket: 'paycheck-4172e.appspot.com',
-  messagingSenderId: '511011525597',
-  appId: '1:511011525597:web:75b6b092407b6e76599c34',
-  measurementId: 'G-E97MZS3KX4',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
 const app = initializeApp(firebaseConfig)
