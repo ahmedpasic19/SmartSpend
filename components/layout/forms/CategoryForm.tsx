@@ -45,6 +45,7 @@ const CategoryForm = () => {
       })
 
       setCategory({} as ICategory)
+      setStash({} as TSelect)
     } catch (error) {
       console.log(error)
     }

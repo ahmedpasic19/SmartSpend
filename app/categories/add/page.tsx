@@ -13,10 +13,6 @@ export default function AddCategory() {
       <section className="py-5">
         <CategoryForm />
       </section>
-
-      <section className="w-4/5 h-full mb-5">
-        <CategoryList />
-      </section>
     </main>
   )
 }

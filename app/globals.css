@@ -41,3 +41,7 @@
   animation: slideOut 0.5s ease-out;
   animation-fill-mode: forwards;
 }
+
+.awesome_link {
+  @apply bg-primary text-neutral uppercase font-bold rounded-sm px-4 tracking-widest p-2;
+}

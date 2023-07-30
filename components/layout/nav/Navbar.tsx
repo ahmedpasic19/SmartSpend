@@ -10,7 +10,6 @@ const Navbar = () => {
   const links = [
     { href: '/home', label: 'Home' },
     { href: '/transactions', label: 'Transakcije' },
-    { href: '/transactions/add', label: 'Dodaj transakciju' },
     { href: '/stashes', label: 'Zalihe' },
     { href: '/stashes/add', label: 'Dodaj zalihu' },
     { href: '/categories', label: 'Kategorije' },
