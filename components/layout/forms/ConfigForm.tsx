@@ -1,7 +1,6 @@
 'use client'
 import { FormEvent, useEffect, useState } from 'react'
 
-import useGetUserConfig from '@/hooks/api/useGetUserConfig'
 import useGetLoggedUser from '@/hooks/useGetLoggedUser'
 
 import DatePicker from 'react-datepicker'
@@ -11,22 +10,13 @@ import { addDoc, collection, doc, getDocs, query, updateDoc, where } from 'fireb
 import { IConfig } from '@/models/ConfigModel'
 
 import 'react-datepicker/dist/react-datepicker.css'
-
 const ConfigForm = () => {
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
 
-  const configCollection = collection(db, 'configs')
-
   const currentUser = useGetLoggedUser()
-  const userConfig = useGetUserConfig()
 
-  useEffect(() => {
-    if (Object.keys(userConfig).length) {
-      setStartDate(userConfig.startDate.toDate())
-      setEndDate(userConfig.endDate.toDate())
-    }
-  }, [userConfig])
+  const configCollection = collection(db, 'configs')
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()

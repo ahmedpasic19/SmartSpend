@@ -1,23 +1,41 @@
 'use client'
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 
 import useGetAllUserTransactions from '@/hooks/api/useGetAllUserTransactions'
-import useProtectedRoute from '@/hooks/useProtectedRoute'
-import useGetUserConfig from '@/hooks/api/useGetUserConfig'
 import useGetUserCategories from '@/hooks/api/useGetUserCategories'
 import useGetUserStashes from '@/hooks/api/useGetUserStashes'
+import { IConfig } from '@/models/ConfigModel'
 
 import TransactionList from '@/components/layout/mics/TransactionList'
+
+import { collection, query, where } from 'firebase/firestore'
+import { useCollectionData } from 'react-firebase-hooks/firestore'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth, db } from '@/config/firebase-config'
 
 import { getNumberOfDatesBetween } from '@/utils/utils'
 
 import '@/app/globals.css'
 
 export default function Home() {
-  const userConfig = useGetUserConfig()
+  // const userConfig = useGetUserConfig()
   const transactions = useGetAllUserTransactions()
   const categories = useGetUserCategories()
   const stashes = useGetUserStashes()
+
+  const [userConfig, setUserConfig] = useState({} as IConfig)
+  const [state] = useAuthState(auth)
+
+  const configCollection = collection(db, 'configs')
+  const q = query(configCollection, where('user_id', '==', state?.uid || ''))
+
+  const [configs] = useCollectionData(q)
+
+  useEffect(() => {
+    if (configs?.length) {
+      setUserConfig(configs[configs.length - 1] as IConfig)
+    }
+  }, [configs])
 
   const total = useMemo(() => {
     const totalMoney = transactions.reduce((prev, curr) => {
@@ -87,8 +105,6 @@ export default function Home() {
     [userConfig],
   )
 
-  console.log(userConfig)
-
   return (
     <main className="page w-full flex flex-col justify-start items-center pt-10">
       <section className="w-4/5 bg-secondary flex justify-start items-center flex-col gap-2 text-neutral py-5 mt-10 rounded-sm drop-shadow-[0px_0px_3px_rgba(0,0,0,0.25)]">
@@ -100,7 +116,7 @@ export default function Home() {
         <ul className="w-4/5 text-accent/50">
           {modifiedStashes.map((stash) => (
             <li key={Math.random()} className="w-full flex justify-between items-center">
-              <label className={`font-thin ${stash.main === true ? 'font-bold' : ''}`}>{stash.name}:</label>
+              <label className={` ${stash.main === true ? 'font-bold' : 'font-thin'}`}>{stash.name}:</label>
               <label className="font-semibold tracking-wide">{stash.total} KM</label>
             </li>
           ))}
@@ -114,9 +130,9 @@ export default function Home() {
         <section className="flex flex-col w-full px-4 text-accent font-semibold">
           <label>Period:</label>
           <div className="flex justify-evenly text-accent/50 font-normal">
-            <p>{userConfig?.startDate?.toDate().toISOString().substring(0, 10)}</p>
+            <p>{userConfig?.startDate?.toDate().toLocaleDateString('en-GB').replace(/\//g, '-')}</p>
             <span className="mx-3">-</span>
-            <p>{userConfig?.endDate?.toDate().toISOString().substring(0, 10)}</p>
+            <p>{userConfig?.endDate?.toDate().toLocaleDateString('en-GB').replace(/\//g, '-')}</p>
           </div>
         </section>
       </section>
