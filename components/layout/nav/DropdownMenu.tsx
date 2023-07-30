@@ -35,7 +35,7 @@ const DropdownMenu = ({ setIsOpen, isOpen, wasOpen, links }: TProps) => {
           >
             <BiChevronLeft className="h-8 w-8 text-neutral" />
           </button>
-          <h1 className="w-full text-center">Paycheck</h1>
+          <h1 className="w-full text-center">SmartSpend</h1>
         </div>
 
         <ul className="h-screen overflow-y-auto">
