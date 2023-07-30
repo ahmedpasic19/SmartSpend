@@ -57,7 +57,12 @@ const CategoryForm = () => {
 
       <fieldset className="z-10">
         <label className="w-full text-start py-2 text-lg text-accent font-semibold tracking-wide">Zaliha</label>
-        <Select options={stashOptions} placeholder="Odaberi zalihu" onChange={handleSelectChange} />
+        <Select
+          options={stashOptions}
+          placeholder="Odaberi zalihu"
+          value={Object.keys(stash).length ? stash : null}
+          onChange={handleSelectChange}
+        />
       </fieldset>
 
       <section className="w-full flex flex-col gap-2 justify-center items-center mt-4">

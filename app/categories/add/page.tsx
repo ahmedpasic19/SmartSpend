@@ -1,5 +1,6 @@
 import CategoryForm from '@/components/layout/forms/CategoryForm'
-import CategoryList from '@/components/layout/mics/CategoryList'
+
+import '@/app/globals.css'
 
 export default function AddCategory() {
   return (
