@@ -7,9 +7,15 @@ export const metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="flex flex-col-reverse">
-      <Navbar />
-      <body>{children}</body>
+    <html lang="en">
+      <body>
+        <div className="flex flex-col">
+          <div>
+            <Navbar />
+          </div>
+          {children}
+        </div>
+      </body>
     </html>
   )
 }
