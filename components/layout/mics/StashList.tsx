@@ -1,12 +1,15 @@
 'use client'
 import { useMemo } from 'react'
 
+import { AiFillEdit } from 'react-icons/ai'
 import MainTable from '@/components/table/MainTable'
 import Link from 'next/link'
 
 type TStash = {
+  uid: string
   name: string
   total: number
+  main: boolean
 }
 
 type TProps = {
@@ -30,6 +33,20 @@ const StashList: React.FC<TProps> = ({ stashes, pagination }) => {
         accessorKey: 'amount',
         cell: ({ row }: { row: TRow }) =>
           row.original.total > 0 ? row.original.total + ' KM' : row.original.total + ' KM',
+      },
+      {
+        header: 'Primarni',
+        accessorKey: 'main',
+        cell: ({ row }: { row: TRow }) => (row.original.main ? 'DA' : 'NE'),
+      },
+      {
+        header: 'Akcije',
+        accessorKey: 'actions',
+        cell: ({ row }: { row: TRow }) => (
+          <Link href={`/stashes/edit/${row.original.uid}`} className="w-full flex justify-center items-center">
+            <AiFillEdit className="bg-secondary rounded-sm h-10 w-10" />
+          </Link>
+        ),
       },
     ],
     [],

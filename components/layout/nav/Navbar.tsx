@@ -16,7 +16,7 @@ const Navbar = () => {
   ]
 
   return (
-    <nav className="w-full justify-between items-center flex h-10 bg-primary fixed top-0 left-0 right-0 z-50 drop-shadow-[0px_0px_3px_rgba(0,0,0,0.25)]">
+    <nav className="w-full justify-between items-center flex py-2 bg-primary fixed top-0 left-0 right-0 z-50 drop-shadow-[0px_0px_3px_rgba(0,0,0,0.25)]">
       <h3 className="text-lg text-neutral font-bold tracking-wider pl-5">SmartSpend</h3>
 
       <button

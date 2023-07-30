@@ -11,21 +11,28 @@ export default function Stashes() {
   const transactions = useGetAllUserTransactions()
 
   // Sum all transactions of the stash
-  const modifiedStashes = stashes.reduce((prevS, currS) => {
-    const transactionTotal = transactions.reduce((prevT, currT) => {
-      // Find a transaction asociated to the current stash
-      if (currS.uid === currT.stash_id) {
-        console.log(typeof currT.amount)
-        return prevT + currT.amount
-      }
+  const modifiedStashes = stashes
+    .reduce((prevS, currS) => {
+      const transactionTotal = transactions.reduce((prevT, currT) => {
+        // Find a transaction asociated to the current stash
+        if (currS.uid === currT.stash_id) {
+          console.log(typeof currT.amount)
+          return prevT + currT.amount
+        }
 
-      return prevT
-    }, 0)
+        return prevT
+      }, 0)
 
-    const stash = { name: currS.name, total: transactionTotal }
+      const stash = { name: currS.name, total: transactionTotal, main: currS.main, uid: currS.uid }
 
-    return prevS.concat([stash])
-  }, [] as { name: string; total: number }[])
+      return prevS.concat([stash])
+    }, [] as { name: string; total: number; main: boolean; uid: string }[])
+    .reduce((prev, curr) => {
+      const found = prev.find((stash) => stash.uid === curr.uid)
+
+      if (found) return prev
+      else return prev.concat([curr])
+    }, [] as { uid: string; name: string; total: number; main: boolean }[])
 
   return (
     <main className="page w-full flex flex-col justify-start items-center pt-10">
