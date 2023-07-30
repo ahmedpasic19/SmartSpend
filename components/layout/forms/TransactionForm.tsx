@@ -1,8 +1,6 @@
 'use client'
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { ITransaction } from '@/models/TransactionModel'
 
-import useGetLoggedUser from '@/hooks/useGetLoggedUser'
 import useGetUserStashes from '@/hooks/api/useGetUserStashes'
 import useGetStashCategories from '@/hooks/api/useGetStashCategories'
 
@@ -10,8 +8,10 @@ import FieldSet from '@/components/Fieldset'
 import Select from 'react-select'
 import Link from 'next/link'
 
-import { db } from '@/config/firebase-config'
+import { auth, db } from '@/config/firebase-config'
 import { addDoc, collection } from 'firebase/firestore'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { ITransaction } from '@/models/TransactionModel'
 
 type TSelect = { label: string; value: string }
 
@@ -23,7 +23,7 @@ const TransactionForm = () => {
 
   const transactionCollection = collection(db, 'transactions')
 
-  const currentUser = useGetLoggedUser()
+  const [user] = useAuthState(auth)
 
   const stashes = useGetUserStashes()
   const stashCategories = useGetStashCategories(selectedStash.value)
@@ -53,12 +53,12 @@ const TransactionForm = () => {
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
-      if (!currentUser?.uid || !selectedCategory?.value || !selectedStash.value) return
+      if (!user?.uid || !selectedCategory?.value || !selectedStash.value) return
 
       await addDoc(transactionCollection, {
         ...transaction,
         amount: type.value === 'income' ? transaction.amount : -transaction.amount,
-        user_id: currentUser?.uid,
+        user_id: user?.uid,
         category_id: selectedCategory.value || null,
         stash_id: selectedStash.value,
         created_at: new Date(),

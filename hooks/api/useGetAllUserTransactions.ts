@@ -1,23 +1,22 @@
 import { useEffect, useState } from 'react'
 
-import useGetLoggedUser from '../useGetLoggedUser'
-
-import { db } from '@/config/firebase-config'
+import { auth, db } from '@/config/firebase-config'
 import { collection, getDocs, query, where } from 'firebase/firestore'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import { ITransaction } from '@/models/TransactionModel'
 
 const useGetAllUserTransactions = () => {
   const [transactions, setTransactions] = useState([] as ITransaction[])
 
-  const currentUser = useGetLoggedUser()
+  const [user] = useAuthState(auth)
 
   const transactionCollectionRef = collection(db, 'transactions')
 
   useEffect(() => {
     const getTransactions = async () => {
       try {
-        if (currentUser?.uid) {
-          const q = query(transactionCollectionRef, where('user_id', '==', currentUser?.uid))
+        if (user?.uid) {
+          const q = query(transactionCollectionRef, where('user_id', '==', user?.uid))
           // GET users transactions
           const data = await getDocs(q)
 
@@ -31,7 +30,7 @@ const useGetAllUserTransactions = () => {
     }
 
     getTransactions()
-  }, [currentUser])
+  }, [user])
 
   return transactions
 }

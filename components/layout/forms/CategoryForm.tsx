@@ -2,14 +2,14 @@
 import { ChangeEvent, useState, FormEvent } from 'react'
 import { ICategory } from '@/models/CategoryModel'
 
-import useGetLoggedUser from '@/hooks/useGetLoggedUser'
 import useGetUserStashes from '@/hooks/api/useGetUserStashes'
 
 import FieldSet from '@/components/Fieldset'
 import Select from 'react-select'
 
-import { db } from '@/config/firebase-config'
+import { auth, db } from '@/config/firebase-config'
 import { addDoc, collection } from 'firebase/firestore'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 type TSelect = { label: string; value: string }
 
@@ -17,7 +17,7 @@ const CategoryForm = () => {
   const [category, setCategory] = useState({ name: '' } as ICategory)
   const [stash, setStash] = useState({} as TSelect)
 
-  const currentUser = useGetLoggedUser()
+  const [user] = useAuthState(auth)
 
   const stashesCollection = collection(db, 'categories')
 
@@ -36,11 +36,11 @@ const CategoryForm = () => {
     e.preventDefault()
 
     try {
-      if (!category.name || !currentUser?.uid) return
+      if (!category.name || !user?.uid) return
 
       await addDoc(stashesCollection, {
         name: category.name,
-        user_id: currentUser?.uid,
+        user_id: user?.uid,
         stash_id: stash.value,
       })
 

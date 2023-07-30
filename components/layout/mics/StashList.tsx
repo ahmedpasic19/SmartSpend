@@ -57,7 +57,7 @@ const StashList: React.FC<TProps> = ({ stashes, pagination }) => {
   return (
     <div className="w-full bg-secondary p-5 rounded-md h-full overflow-y-auto flex flex-col gap-2 drop-shadow-[0px_0px_3px_rgba(0,0,0,0.25)]">
       <section className="w-full flex justify-between items-center">
-        <h3 className="text-neutral text-lg font-bold tracking-wider uppercase">Izvori</h3>
+        <h3 className="text-neutral text-lg font-bold tracking-wider uppercase">Zalihe</h3>
         <Link href="/stashes/add" className="awesome_link">
           Dodaj
         </Link>

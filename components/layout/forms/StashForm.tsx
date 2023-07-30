@@ -3,14 +3,13 @@ import { ChangeEvent, useState, FormEvent, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { IStash } from '@/models/StashMode'
 
-import useGetLoggedUser from '@/hooks/useGetLoggedUser'
-
 import FieldSet from '@/components/Fieldset'
 
-import { db } from '@/config/firebase-config'
+import { auth, db } from '@/config/firebase-config'
 import { addDoc, collection, updateDoc, doc } from 'firebase/firestore'
 import useGetStash from '@/hooks/api/useGetStash'
 import Checkbox from '../mics/Checkbox'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 type Tprops = {
   isEditing?: boolean
@@ -22,7 +21,7 @@ const StashForm: React.FC<Tprops> = ({ isEditing, stashId }) => {
 
   const router = useRouter()
 
-  const currentUser = useGetLoggedUser()
+  const [user] = useAuthState(auth)
 
   // if on [stash_id] page
   // GET the stash to update it
@@ -43,11 +42,11 @@ const StashForm: React.FC<Tprops> = ({ isEditing, stashId }) => {
 
     try {
       if (!isEditing || !stashId) {
-        if (!stash.name || !currentUser?.uid) return
+        if (!stash.name || !user?.uid) return
 
         await addDoc(stashesCollection, {
           ...stash,
-          user_id: currentUser?.uid,
+          user_id: user?.uid,
         })
       }
       if (isEditing && stashId) {
@@ -55,7 +54,7 @@ const StashForm: React.FC<Tprops> = ({ isEditing, stashId }) => {
 
         await updateDoc(stashRef, {
           ...stash,
-          user_id: currentUser?.uid,
+          user_id: user?.uid,
         })
 
         router.push('/stashes')

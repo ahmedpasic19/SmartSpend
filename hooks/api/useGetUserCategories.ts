@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 
-import useGetLoggedUser from '@/hooks/useGetLoggedUser'
-
-import { db } from '@/config/firebase-config'
+import { auth, db } from '@/config/firebase-config'
 import { collection, getDocs, query, where } from 'firebase/firestore'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import { ICategory } from '@/models/CategoryModel'
 
 const useGetUserCategories = () => {
@@ -11,20 +10,20 @@ const useGetUserCategories = () => {
 
   const categoriesCollection = collection(db, 'categories')
 
-  const currentUser = useGetLoggedUser()
+  const [user] = useAuthState(auth)
 
   useEffect(() => {
     // GET user categories
     const getUserCategories = async () => {
-      if (currentUser?.uid) {
-        const q = query(categoriesCollection, where('user_id', '==', currentUser?.uid))
+      if (user?.uid) {
+        const q = query(categoriesCollection, where('user_id', '==', user?.uid))
         const data = await getDocs(q)
         const categories = data.docs.map((doc) => ({ ...(doc.data() as ICategory), uid: doc.id }))
         setCategories(categories)
       }
     }
     getUserCategories()
-  }, [currentUser?.uid])
+  }, [user?.uid])
 
   return categories
 }

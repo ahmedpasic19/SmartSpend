@@ -1,12 +1,11 @@
 'use client'
-import { FormEvent, useEffect, useState } from 'react'
-
-import useGetLoggedUser from '@/hooks/useGetLoggedUser'
+import { FormEvent, useState } from 'react'
 
 import DatePicker from 'react-datepicker'
 
-import { db } from '@/config/firebase-config'
+import { auth, db } from '@/config/firebase-config'
 import { addDoc, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import { IConfig } from '@/models/ConfigModel'
 
 import 'react-datepicker/dist/react-datepicker.css'
@@ -14,7 +13,7 @@ const ConfigForm = () => {
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
 
-  const currentUser = useGetLoggedUser()
+  const [user] = useAuthState(auth)
 
   const configCollection = collection(db, 'configs')
 
@@ -24,7 +23,7 @@ const ConfigForm = () => {
     try {
       if (!startDate || !endDate) return
 
-      const q = query(configCollection, where('user_id', '==', currentUser?.uid))
+      const q = query(configCollection, where('user_id', '==', user?.uid))
       const data = await getDocs(q)
       const userConfig = data.docs.map((doc) => ({ ...(doc.data() as IConfig), uid: doc.id }))
       const confg = userConfig[userConfig.length - 1] || ({} as IConfig)
@@ -33,7 +32,7 @@ const ConfigForm = () => {
         await addDoc(configCollection, {
           startDate,
           endDate,
-          user_id: currentUser?.uid,
+          user_id: user?.uid,
         })
       } else {
         const configRef = doc(db, 'configs', confg.uid)
@@ -41,7 +40,7 @@ const ConfigForm = () => {
         await updateDoc(configRef, {
           startDate,
           endDate,
-          user_id: currentUser?.uid,
+          user_id: user?.uid,
         })
       }
 
