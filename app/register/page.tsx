@@ -1,6 +1,12 @@
+'use client'
 import SignUpForm from '../../components/layout/forms/SignUpForm'
+import useProtectedAuthRoute from '@/hooks/useProtectedAuthRoute'
+
+import '@/app/globals.css'
 
 export default function Register() {
+  useProtectedAuthRoute()
+
   return (
     <main className="bg-primary h-screen w-full flex flex-col justify-evenly items-center">
       <section className="w-full flex justify-center items-center flex-col gap-2 text-neutral">

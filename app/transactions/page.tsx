@@ -5,10 +5,13 @@ import TransactionList from '@/components/layout/mics/TransactionList'
 import useGetAllUserTransactions from '@/hooks/api/useGetAllUserTransactions'
 import useGetUserCategories from '@/hooks/api/useGetUserCategories'
 import useGetUserStashes from '@/hooks/api/useGetUserStashes'
+import useProtectedRoute from '@/hooks/useProtectedRoute'
 
 import '@/app/globals.css'
 
 export default function Transactions() {
+  useProtectedRoute()
+
   const transactions = useGetAllUserTransactions()
   const categories = useGetUserCategories()
   const stashes = useGetUserStashes()

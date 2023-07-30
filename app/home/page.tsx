@@ -4,7 +4,7 @@ import { useMemo, useState, useEffect } from 'react'
 import useGetAllUserTransactions from '@/hooks/api/useGetAllUserTransactions'
 import useGetUserCategories from '@/hooks/api/useGetUserCategories'
 import useGetUserStashes from '@/hooks/api/useGetUserStashes'
-import { IConfig } from '@/models/ConfigModel'
+import useProtectedRoute from '@/hooks/useProtectedRoute'
 
 import TransactionList from '@/components/layout/mics/TransactionList'
 
@@ -12,6 +12,7 @@ import { collection, query, where } from 'firebase/firestore'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, db } from '@/config/firebase-config'
+import { IConfig } from '@/models/ConfigModel'
 
 import { getNumberOfDatesBetween } from '@/utils/utils'
 
@@ -30,6 +31,8 @@ export default function Home() {
   const q = query(configCollection, where('user_id', '==', state?.uid || ''))
 
   const [configs] = useCollectionData(q)
+
+  useProtectedRoute()
 
   useEffect(() => {
     if (configs?.length) {
@@ -105,6 +108,8 @@ export default function Home() {
     [userConfig],
   )
 
+  const average = useMemo(() => mainStashTotal / days, [mainStashTotal, days])
+
   return (
     <main className="page w-full flex flex-col justify-start items-center pt-10">
       <section className="w-4/5 bg-secondary flex justify-start items-center flex-col gap-2 text-neutral py-5 mt-10 rounded-sm drop-shadow-[0px_0px_3px_rgba(0,0,0,0.25)]">
@@ -124,7 +129,7 @@ export default function Home() {
 
         <section className="flex justify-between w-full px-4 font-bold tracking-wider text-accent">
           <label>Potrošnja: </label>
-          <p className="tracking-tight">{(mainStashTotal / days).toFixed(2)} KM/danu</p>
+          <p className="tracking-tight">{average.toFixed(2)} KM/danu</p>
         </section>
 
         <section className="flex flex-col w-full px-4 text-accent font-semibold">

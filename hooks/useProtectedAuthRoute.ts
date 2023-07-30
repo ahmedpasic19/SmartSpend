@@ -1,19 +1,22 @@
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+
 import { auth } from '@/config/firebase-config'
-import { onAuthStateChanged, User } from 'firebase/auth/cordova'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 const useProtectedAuthRoute = () => {
-  const [user, setUser] = useState({} as User)
+  const [user, loading, error] = useAuthState(auth)
 
   const router = useRouter()
-
-  onAuthStateChanged(auth, (user) => user && setUser(user))
-
-  // Redirect if logged in
   useEffect(() => {
-    if (Object.keys(user).length) router.push('/home')
-  }, [user])
+    // If the user is not logged in, redirect to the specified URL
+    if (!loading && user) {
+      router.push('/home')
+    }
+  }, [user, loading])
+
+  // You can also return the user state, loading, and error if needed
+  return { user, loading, error }
 }
 
 export default useProtectedAuthRoute

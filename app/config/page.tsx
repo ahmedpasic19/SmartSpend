@@ -1,9 +1,11 @@
 'use client'
 import ConfigForm from '@/components/layout/forms/ConfigForm'
+import useProtectedRoute from '@/hooks/useProtectedRoute'
 
 import '@/app/globals.css'
 
 export default function Config() {
+  useProtectedRoute()
   return (
     <main className="page w-full flex flex-col justify-start items-center pt-10">
       <section className="w-full flex justify-beetwen items-center flex-col gap-2 text-neutral py-5">

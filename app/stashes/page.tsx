@@ -3,10 +3,13 @@ import StashList from '@/components/layout/mics/StashList'
 
 import useGetUserStashes from '@/hooks/api/useGetUserStashes'
 import useGetAllUserTransactions from '@/hooks/api/useGetAllUserTransactions'
+import useProtectedRoute from '@/hooks/useProtectedRoute'
 
 import '@/app/globals.css'
 
 export default function Stashes() {
+  useProtectedRoute()
+
   const stashes = useGetUserStashes()
   const transactions = useGetAllUserTransactions()
 

@@ -1,7 +1,12 @@
+'use client'
 import LoginForm from '@/components/layout/forms/LoginForm'
+import useProtectedAuthRoute from '@/hooks/useProtectedAuthRoute'
+
 import './globals.css'
 
 export default function Login() {
+  useProtectedAuthRoute()
+
   return (
     <main className="page w-full flex flex-col justify-evenly items-center">
       <section className="w-full flex justify-center items-center flex-col gap-2 text-neutral">

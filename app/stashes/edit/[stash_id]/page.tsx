@@ -1,10 +1,11 @@
 'use client'
-
 import StashForm from '@/components/layout/forms/StashForm'
+import useProtectedRoute from '@/hooks/useProtectedRoute'
 
 import '@/app/globals.css'
 
 export default function AddStash({ params }: { params: { stash_id: string } }) {
+  useProtectedRoute()
   const stashId = typeof params.stash_id === 'string' ? params.stash_id : ''
 
   return (

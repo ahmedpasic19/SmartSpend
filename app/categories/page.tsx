@@ -3,10 +3,13 @@
 import CategoryList from '@/components/layout/mics/CategoryList'
 import useGetUserCategories from '@/hooks/api/useGetUserCategories'
 import useGetUserStashes from '@/hooks/api/useGetUserStashes'
+import useProtectedRoute from '@/hooks/useProtectedRoute'
 
 import '@/app/globals.css'
 
 export default function Categories() {
+  useProtectedRoute()
+
   const categories = useGetUserCategories()
   const stashes = useGetUserStashes()
 
