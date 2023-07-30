@@ -13,7 +13,6 @@ const Navbar = () => {
     { href: '/stashes', label: 'Zalihe' },
     { href: '/stashes/add', label: 'Dodaj zalihu' },
     { href: '/categories', label: 'Kategorije' },
-    { href: '/categories/add', label: 'Dodaj kategorije' },
   ]
 
   return (
