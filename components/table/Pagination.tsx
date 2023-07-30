@@ -11,43 +11,22 @@ interface ReactTableProps<T extends object> {
 
 const Pagination = <T extends object>({ table }: ReactTableProps<T>) => {
   return (
-    <div className="sticky flex h-12 w-full items-center justify-center gap-2 bg-primary">
+    <div className="sticky flex w-full items-center justify-center bg-primary">
       <button
-        className="w-full cursor-pointer rounded border bg-primary p-1"
+        className="w-full h-full cursor-pointer rounded bg-primary p-1 flex justify-center items-center"
         onClick={() => table.setPageIndex(0)}
         disabled={!table.getCanPreviousPage()}
       >
         <Bi.BiChevronsLeft className="h-8 w-8 text-neutral" />
       </button>
       <button
-        className="w-full cursor-pointer rounded border bg-primary p-1"
+        className="w-full h-full cursor-pointer rounded bg-primary p-1 flex justify-center items-center"
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
       >
         <Bi.BiChevronLeft className="h-8 w-8 text-neutral" />
       </button>
-      <button
-        className="w-full cursor-pointer rounded border bg-primary p-1"
-        onClick={() => table.nextPage()}
-        disabled={!table.getCanNextPage()}
-      >
-        <Bi.BiChevronRight className="h-8 w-8 text-neutral" />
-      </button>
-      <button
-        className="w-full cursor-pointer rounded border bg-primary p-1"
-        onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-        disabled={!table.getCanNextPage()}
-      >
-        <Bi.BiChevronsRight className="h-8 w-8 text-neutral" />
-      </button>
-      <span className="flex cursor-pointer items-center gap-1 text-lg font-medium text-neutral">
-        <div>Stranica</div>
-        <strong>
-          {table.getState().pagination.pageIndex + 1} od {table.getPageCount()}
-        </strong>
-      </span>
-      <span className="flex items-center gap-1 text-lg font-medium text-neutral">
-        | Idi na stranicu:
+      <span className="flex items-center gap-1 text-lg text-neutral font-semibold">
         <input
           type="number"
           placeholder="Broj..."
@@ -56,24 +35,23 @@ const Pagination = <T extends object>({ table }: ReactTableProps<T>) => {
             const page = e.target.value ? Number(e.target.value) - 1 : 0
             table.setPageIndex(page)
           }}
-          className="w-16 rounded border p-1 outline-none"
+          className="w-full rounded border p-1 outline-none bg-secondary text-center"
         />
       </span>
-      <select
-        className="text-lg font-medium text-gray-800"
-        value={table.getState().pagination.pageSize}
-        onChange={(e) => {
-          table.setPageSize(Number(e.target.value))
-        }}
+      <button
+        className="w-full h-full cursor-pointer rounded bg-primary p-1 flex justify-center items-center"
+        onClick={() => table.nextPage()}
+        disabled={!table.getCanNextPage()}
       >
-        {/* change items per page in this array */}
-        {[10, 20, 30, 40, 50].map((pageSize) => (
-          <option key={pageSize} value={pageSize}>
-            Show {pageSize}
-          </option>
-        ))}
-      </select>
-      <div className="h-4" />
+        <Bi.BiChevronRight className="h-8 w-8 text-neutral" />
+      </button>
+      <button
+        className="w-full h-full cursor-pointer rounded bg-primary p-1 flex justify-center items-center"
+        onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+        disabled={!table.getCanNextPage()}
+      >
+        <Bi.BiChevronsRight className="h-8 w-8 text-neutral" />
+      </button>
     </div>
   )
 }

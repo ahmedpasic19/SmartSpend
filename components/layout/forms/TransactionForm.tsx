@@ -2,33 +2,63 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { ITransaction } from '@/models/TransactionModel'
 
+import useGetLoggedUser from '@/hooks/useGetLoggedUser'
+import useGetUserStashes from '@/hooks/api/useGetUserStashes'
+import useGetStashCategories from '@/hooks/api/useGetStashCategories'
+
 import FieldSet from '@/components/Fieldset'
+import Select from 'react-select'
+import Link from 'next/link'
 
 import { db } from '@/config/firebase-config'
-import { auth } from '@/config/firebase-config'
 import { addDoc, collection } from 'firebase/firestore'
+
+type TSelect = { label: string; value: string }
 
 const TransactionForm = () => {
   const [transaction, setTransaction] = useState({} as ITransaction)
+  const [selectedStash, setSelectedStash] = useState({} as TSelect)
+  const [selectedCategory, setSelectedCategory] = useState({} as TSelect)
 
-  const transactionCollectionRef = collection(db, 'transactions')
+  const transactionCollection = collection(db, 'transactions')
 
-  const currentUserID = auth.currentUser?.uid
+  const currentUser = useGetLoggedUser()
+
+  const stashes = useGetUserStashes()
+  const stashCategories = useGetStashCategories(selectedStash.value)
+
+  // select option
+  const stashOptions = stashes.map((stash) => ({ label: stash.name, value: stash.uid }))
+  const categoryOptions = stashCategories.map((cat) => ({ label: cat.name, value: cat.uid }))
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTransaction((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const onSubmit = async (e: FormEvent) => {
-    try {
-      if (!currentUserID) return
+  const handleStashSelect = (option: TSelect | null) => {
+    if (option) setSelectedStash(option)
+  }
+  const handleCategorySelect = (option: TSelect | null) => {
+    if (option) setSelectedCategory(option)
+  }
 
-      await addDoc(transactionCollectionRef, {
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    try {
+      if (!currentUser?.uid || !selectedCategory?.value || !selectedStash.value) return
+
+      await addDoc(transactionCollection, {
         ...transaction,
-        user_id: currentUserID,
+        user_id: currentUser?.uid,
+        category_id: selectedCategory.value || null,
+        stash_id: selectedStash.value,
+        created_at: new Date(),
+        updated_at: new Date(),
       })
 
       setTransaction({} as ITransaction)
+      setSelectedStash({} as TSelect)
+      setSelectedCategory({} as TSelect)
     } catch (error) {
       console.log(error)
     }
@@ -39,6 +69,28 @@ const TransactionForm = () => {
       <h3 className="text-2xl text-neutral font-bold tracking-tight w-full text-center pb-4">Dodaj transakciju</h3>
 
       <FieldSet label="Iznos" name="amount" value={transaction.amount} onChange={handleChange} type="number" />
+      <fieldset className="mt-2">
+        <Select
+          options={stashOptions}
+          value={Object.keys(selectedStash).length ? selectedStash : null}
+          placeholder="Odaberite izvor"
+          onChange={handleStashSelect}
+        />
+        <Link href="/stashes/add" className="w-full text-end link">
+          Dodajte izvor
+        </Link>
+      </fieldset>
+      <fieldset className="mt-2">
+        <Select
+          options={categoryOptions}
+          value={Object.keys(selectedCategory).length ? selectedCategory : null}
+          placeholder="Odaberite kategoriju"
+          onChange={handleCategorySelect}
+        />
+        <Link href="/categories/add" className="w-full text-end link">
+          Dodajte kategoriju
+        </Link>
+      </fieldset>
 
       <section className="w-full flex flex-col gap-2 justify-center items-center mt-4">
         <button onClick={onSubmit} className="btn">
