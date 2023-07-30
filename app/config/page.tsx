@@ -1,5 +1,5 @@
 'use client'
-import DateForm from '@/components/layout/forms/DateForm'
+import ConfigForm from '@/components/layout/forms/ConfigForm'
 
 import '@/app/globals.css'
 
@@ -11,7 +11,7 @@ export default function Config() {
       </section>
 
       <section className="py-5 w-[90%]">
-        <DateForm />
+        <ConfigForm />
       </section>
     </main>
   )

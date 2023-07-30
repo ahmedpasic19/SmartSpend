@@ -18,10 +18,11 @@ const useGetUserConfig = () => {
       try {
         if (currentUser?.uid) {
           const q = query(configCollection, where('user_id', '==', currentUser.uid))
-
           const data = await getDocs(q)
           const userConfig = data.docs.map((doc) => ({ ...(doc.data() as IConfig), uid: doc.id }))
-          setUserConfig(userConfig[0] ? userConfig[0] : ({} as IConfig))
+          const confg = userConfig[userConfig.length - 1] || ({} as IConfig)
+
+          setUserConfig(confg)
         }
       } catch (error) {
         console.log(error)
