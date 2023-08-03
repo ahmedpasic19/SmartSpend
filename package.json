@@ -8,7 +8,9 @@
     "dev": "npm run dev:client & npm run dev:server",
     "build:client": "next build ./client",
     "build:server": "babel ./server --out-dir dist/server --source-maps",
-    "build": "npm run build:client && npm run build:server"
+    "build": "npm run build:client && npm run build:server",
+    "predeploy": "rimraf dist/ && npm run build",
+    "deploy": "cross-env NODE_ENV=production firebase deploy --only functions,hosting"
   },
   "main": "dist/server/index.js",
   "engines": {
