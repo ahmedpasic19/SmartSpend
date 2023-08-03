@@ -3,14 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev:client": "next ./client",
-    "dev:server": "babel ./server --out-dir dist/server --source-maps --watch",
+    "dev:client": "next src/client",
+    "dev:server": "babel src/server --out-dir dist/server --source-maps --watch",
     "dev": "npm run dev:client & npm run dev:server",
-    "build:client": "next build ./client",
-    "build:server": "babel ./server --out-dir dist/server --source-maps",
+    "build:client": "next build src/client",
+    "build:server": "babel src/server --out-dir dist/server --source-maps",
     "build": "npm run build:client && npm run build:server",
+    "preserve": "npm run build",
+    "serve": "cross-env NODE_ENV=production firebase serve --only functions,hosting",
     "predeploy": "rimraf dist/ && npm run build",
-    "deploy": "cross-env NODE_ENV=production firebase deploy --only functions,hosting"
+    "deploy": "cross-env NODE_ENV=production firebase deploy --only functions,hosting",
+    "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
+    "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\" --write"
   },
   "main": "dist/server/index.js",
   "engines": {
